@@ -39,7 +39,6 @@ reload = False
 font = pygame.font.Font("../pong/font/Acme 9 Regular.ttf", 18)
 
 # Game loop
-
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
