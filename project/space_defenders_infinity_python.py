@@ -8,12 +8,15 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Object Catcher")
 
 # Colors
-WHITE = (255, 255, 255)
+WHITE = (255, 255, 255) # Text color
 BLACK = (0, 0, 0)
 RED = (255, 50, 50)
-GREEN = (50, 255, 50)
-BLUE = (100, 100, 255)
+GREY = (150, 150, 150)
+LIGHT_GREY = (200, 200, 200)
+GREEN = (50, 255, 50) # Bullets
+BLUE = (100, 100, 255) # Player
 DARK_BLUE = (50, 50, 150)
+NAVY = (20, 10, 40) # Screen background
 YELLOW = (255, 255, 0) # Enemy
 PURPLE = (200, 50, 255) # Special enemy
 
@@ -45,7 +48,7 @@ while True:
 
     keys = pygame.key.get_pressed()
 
-    screen.fill(BLACK)
+    screen.fill(NAVY)
 
     # Enemies Spawning
     if random.randint(1, 50) == 1:
@@ -93,7 +96,7 @@ while True:
         else:
             reload_timer -= 10
 
-    if keys[pygame.K_r]:
+    if keys[pygame.K_r] and ammo != 50:
         reload = True
 
     print(reload_timer)
@@ -122,6 +125,9 @@ while True:
                     bullets.remove(bul)
                     if not special_enemy_elem >= 20:
                         special_enemy_elem += 1
+
+    # Drawing the hotbar
+    pygame.draw.rect(screen, GREY, (player_x, player_y, 100, 20))
 
     # Drawing text
     screen.blit(font.render("Enemies eleminated: " + str(enemy_elem) + " / 50", True, WHITE), (10, 10))
