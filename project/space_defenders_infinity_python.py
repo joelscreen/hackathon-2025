@@ -93,13 +93,12 @@ while True:
             ammo = 50
             reload_timer = 480
             reload = False
+            cooldown = 0
         else:
             reload_timer -= 10
 
     if keys[pygame.K_r] and ammo != 50:
         reload = True
-
-    print(reload_timer)
 
     # Controlling the bullets
     for bul in bullets[:]:
@@ -127,7 +126,7 @@ while True:
                         special_enemy_elem += 1
 
     # Drawing the hotbar
-    pygame.draw.rect(screen, GREY, (player_x, player_y, 100, 20))
+    pygame.draw.rect(screen, GREY, (680, 50, 100, 400))
 
     # Drawing text
     screen.blit(font.render("Enemies eleminated: " + str(enemy_elem) + " / 50", True, WHITE), (10, 10))
