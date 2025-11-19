@@ -1,0 +1,134 @@
+import pygame
+import random
+from sys import exit
+
+pygame.init()
+
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Fruit catcher infinity")
+
+clock = pygame.time.Clock()
+
+bg = pygame.image.load('../assets/background.png')
+background = pygame.transform.scale(bg, (800, 600))
+
+player_ = pygame.image.load('../assets/basket.png')
+player = pygame.transform.scale(player_, (150, 150))
+
+apple = pygame.image.load('../assets/apple.png')
+apple = pygame.transform.scale(apple, (50, 50))
+
+orange = pygame.image.load('../assets/orange.png')
+orange = pygame.transform.scale(orange, (50, 50))
+
+rock = pygame.image.load('../assets/rock.png')
+rock = pygame.transform.scale(rock, (50, 50))
+
+orange_ = []
+
+level = 1
+
+player_x = 400
+
+fruits = []
+
+score = 0
+
+lives = 10
+
+font = pygame.font.Font("../../practice/pong/font/Acme 9 Regular.ttf", 30)
+
+rock_ = []
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+
+    keys = pygame.key.get_pressed()
+
+    screen.blit(background, (0, 0))
+
+    if random.randint(1, 50) == 1:
+        fruit_x = random.randint(20, 750)
+        fruits.append([fruit_x, -50])
+
+    if random.randint(1, 70) == 1:
+        orange_x = random.randint(20, 750)
+        orange_.append([orange_x, -50])
+
+    if random.randint(1, 90) == 1:
+        rock_x = random.randint(20, 750)
+        rock_.append([rock_x, -50])
+
+    for fruit in fruits:
+        fruit[1] += 5
+        if fruit[1] > 600:
+            fruits.remove(fruit)
+        screen.blit(apple, (fruit[0], fruit[1]))
+
+    for ora in orange_:
+        ora[1] += 5
+        if ora[1] > 600:
+            orange_.remove(ora)
+        screen.blit(orange, (ora[0], ora[1]))
+
+    for ro in rock_:
+        ro[1] += 5
+        if ro[1] > 600:
+            rock_.remove(ro)
+        screen.blit(rock, (ro[0], ro[1]))
+
+    # Collision
+    for fruit in fruits:
+        if fruit[0] - 150 < player_x < fruit[0] + 150 and fruit[1] >= 500 and keys[pygame.K_SPACE]:
+            fruits.remove(fruit)
+            score += 1
+        if fruit[1] >= 600:
+            fruits.remove(fruit)
+            lives -= 1
+    for ora in orange_:
+        if ora[0] - 150 < player_x < ora[0] + 150 and ora[1] >= 500 and keys[pygame.K_SPACE]:
+            orange_.remove(ora)
+            score += 2
+        if ora[1] >= 600:
+            orange_.remove(ora)
+            lives -= 2
+    for ro in rock_:
+        if ro[0] - 150 < player_x < ro[0] + 50 and ro[1] >= 600:
+            rock_.remove(ro)
+            pygame.time.delay(2000)
+            pygame.quit()
+            print("Player bumped into a rock!")
+            exit()
+        if ro[1] >= 600:
+            rock_.remove(ro)
+
+    screen.blit(player, (player_x, 430))
+
+    if keys[pygame.K_LEFT]:
+        player_x -= 10
+    if keys[pygame.K_RIGHT]:
+        player_x += 10
+    if player_x <= 0:
+        player_x = 0
+    if player_x >= 600:
+        player_x = 600
+
+    screen.blit(font.render("Score: " + str(score) + " / 20", True, (255, 255, 255)), (20, 10))
+    screen.blit(font.render("Lives: " + str(lives), True, (255, 255, 255)), (20, 70))
+    screen.blit(font.render("Level: " + str(level), True, (255, 255, 255)), (20, 130))
+
+    if lives <= 0:
+        pygame.time.delay(2000)
+        pygame.quit()
+        print("Player lost all their lives!")
+        exit()
+    if score >= 20:
+        level += 1
+        score = 0
+        lives = 10
+
+    pygame.display.update()
+    clock.tick(60)
